@@ -1,0 +1,10 @@
+- name: Helm install for master server
+  hosts: master
+  gather_facts: no
+  tasks:
+
+    - name: copy Helm binary to desired destination
+      ansible.builtin.copy:
+        src: /share/helm/linux-amd64/helm
+        dest: /usr/local/bin/
+        mode: '0755'
