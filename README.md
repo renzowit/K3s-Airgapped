@@ -1,2 +1,4 @@
 # K3s-Airgapped
- 2e poging
+Required files
+- K3s:
+- 
