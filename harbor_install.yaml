@@ -11,5 +11,28 @@
 
     - name: copy required files for install
       ansible.builtin.copy:
-        src: /share/harbor_images
-        dest: /home/
+        src: /share/harbor/harbor_images
+        dest: /home/harbor_images
+
+    - name: K3s load harbor-core-base image
+      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-core-base.tar
+
+    - name: K3s load harbor-exporter-base image
+      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-exporter-base.tar
+
+    - name: K3s load harbor-nginx-base image
+      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-nginx-base.tar
+
+    - name: K3s load harbor-redis-base image
+      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-redis-base.tar
+
+    - name: K3s load harbor-registry-base image
+      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-registry-base.tar
+
+    - name: K3s load harbor-registryctl-base image
+      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-registryctl-base.tar
+
+    - name: K3s load harbor-trivy-adapter-base image
+      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-trivy-adapter-base.tar
+
+    
