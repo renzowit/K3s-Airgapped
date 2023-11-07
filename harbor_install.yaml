@@ -1,17 +1,25 @@
-- name: Helm install for master server
+- name: Harbor deployment using Helm
   hosts: master
   gather_facts: no
   tasks:
 
-    - name: mkdir directory for harbor container images
+    - name: mkdir directory for Harbor container images
       ansible.builtin.file:
         path: /home/harbor_images
         state: directory
         mode: '0755'
 
+    - name: Set up Kubeconfig
+      ansible.builtin.raw:: export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
     - name: copy required files for install
       ansible.builtin.copy:
         src: /share/harbor/harbor_images
+        dest: /home/harbor_images
+
+    - name: copy Helm chart
+      ansible.builtin.copy:
+        src: /share/harbor/harbor-1.13.0.tgz
         dest: /home/harbor_images
 
     - name: K3s load harbor-core-base image
@@ -35,4 +43,35 @@
     - name: K3s load harbor-trivy-adapter-base image
       ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-trivy-adapter-base.tar
 
+    - name: Create namespace for Harbor
+      ansible.builtin.raw: kubectl create namespace harbor
+
+    - name: Create values.yaml for local setup
+      copy:
+        content: |
+          expose:
+            type: nodePort
+            tls:
+              enabled: false
+            ingress:
+              hosts:
+                core: core.harbor.domain
+                notary: notary.harbor.domain
+            nodePort:
+              name: harbor
+              ports:
+                http:
+                  port: 80
+                  nodePort: 30002
+                https:
+                  port: 443
+                  nodePort: 30003
+                notary:
+                  port: 4443
+                  nodePort: 30004
+          externalURL: http://core.harbor.domain
+        dest: /home/harbor_images/values.yaml
+
+    - name: install Harbor using Helm
+      ansible.builtin.raw: helm install harbor /home/harbor_images/harbor-1.13.0.tgz -f /home/harbor_images/values.yaml
     
