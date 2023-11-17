@@ -1,5 +1,6 @@
 - name: K3s master install
   hosts: master
+  become: true
   gather_facts: no
   tasks:
 
