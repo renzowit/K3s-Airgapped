@@ -20,9 +20,6 @@
         src: /share/harbor/harbor_deployment
         dest: /home/
 
-    - name: Set up Kubeconfig
-      ansible.builtin.raw:: export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-
     - name: Copy images to master
       ansible.builtin.unarchive:
         src: /share/harbor/harbor_images.tar
@@ -58,35 +55,6 @@
     - name: K3s load harbor-db image
       ansible.builtin.raw: k3s ctr images import /home/harbor_images/trivy-adapter-photon-v2.9.1.tar
 
-    - name: Create values.yaml for local setup
-      copy:
-        content: |
-          expose:
-            type: nodePort
-            tls:
-              enabled: false
-            ingress:
-              hosts:
-                core: core.harbor.domain
-                notary: notary.harbor.domain
-            nodePort:
-              name: harbor
-              ports:
-                http:
-                  port: 80
-                  nodePort: 30002
-                https:
-                  port: 443
-                  nodePort: 30003
-                notary:
-                  port: 4443
-                  nodePort: 30004
-          externalURL: http://core.harbor.domain
-        dest: /home/harbor_images/values.yaml
-
-    - name: export Kubeconfig
-      ansible.builtin.raw: export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-
     - name: install Harbor using Helm
-      ansible.builtin.raw: helm install harbor /home/harbor_deployment -f /home/harbor_images/values.yaml
+      ansible.builtin.raw: helm install harbor /home/harbor_deployment
     

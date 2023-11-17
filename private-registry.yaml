@@ -1,0 +1,13 @@
+- name: K3s master install
+  hosts: all
+  gather_facts: no
+  tasks:
+
+    - name: Create etc/rancher/k3s/registries.yaml on all nodes
+      copy:
+        content: |
+          mirrors:
+            registry.local:
+              endpoint:
+                - "https://192.168.1.1:5000"
+        dest: etc/rancher/k3s/registries.yaml
