@@ -1,13 +1,41 @@
-- name: K3s master install
+- name: K3s private registry configuration
   hosts: all
   gather_facts: no
   tasks:
 
-    - name: Create etc/rancher/k3s/registries.yaml on all nodes
+    - name: Create /etc/rancher/k3s/ directory on all nodes
+      ansible.builtin.file:
+        path: /etc/rancher/k3s/
+        state: directory
+        mode: '0755'
+
+    - name: Create /etc/rancher/k3s/registries.yaml on all nodes
       copy:
         content: |
           mirrors:
             registry.local:
               endpoint:
                 - "https://192.168.1.1:5000"
-        dest: etc/rancher/k3s/registries.yaml
+        dest: /etc/rancher/k3s/registries.yaml
+
+- name: Restart K3s master node service
+  hosts: master
+  gather_facts: no
+  tasks:
+
+    - name: Restart K3s service
+      ansible.builtin.systemd:
+        state: restarted
+        daemon_reload: true
+        name: k3s
+
+- name: Restart K3s-agent service on worker nodes
+  hosts: workers
+  gather_facts: no
+  tasks:
+
+    - name: Restart K3s-agent service
+      ansible.builtin.systemd:
+        state: restarted
+        daemon_reload: true
+        name: k3s-agent
