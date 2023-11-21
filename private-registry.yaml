@@ -13,10 +13,14 @@
       copy:
         content: |
           mirrors:
-            192.168.1.1:
+            docker.io:
               endpoint:
                 - "https://192.168.1.1:5000"
               insecure: true
+          configs:
+            "192.168.1.1:5000"
+              tls:
+                insecure_skip_verify: true
         dest: /etc/rancher/k3s/registries.yaml
 
 - name: Restart K3s master node service
