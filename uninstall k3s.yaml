@@ -1,0 +1,23 @@
+- name: K3s master uninstall
+  hosts: master
+  gather_facts: false
+  become: true
+  tasks:
+
+    - name: Execute K3s uninstall script for master
+      ansible.builtin.shell: >-
+        /usr/local/bin/k3s-uninstall.sh
+      args:
+        chdir: "~"
+
+- name: K3s node uninstall
+  hosts: nodes
+  gather_facts: false
+  become: true
+  tasks:
+
+    - name: Execute K3s uninstall script for agent 
+      ansible.builtin.shell: >-
+        /usr/local/bin/k3s-agent-uninstall.sh
+      args:
+        chdir: "~"
