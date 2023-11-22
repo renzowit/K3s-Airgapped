@@ -90,3 +90,5 @@
 
     - name: reload firewall
       ansible.builtin.raw: firewall-cmd --reload
+
+    - name: bullshit
