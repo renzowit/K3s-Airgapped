@@ -1,0 +1,92 @@
+- name: Docker install
+  hosts: all
+  gather_facts: no
+  become: True
+  tasks:
+
+    - name: copy required files for install
+      ansible.builtin.copy:
+        src: /share/docker/
+        dest: /home/
+
+    - name: Install Docker and related packages
+      yum:
+        name:
+          - /home/docker-ce-cli-24.0.6-1.el9.x86_64.rpm
+          - /home/docker-ce-rootless-extras-24.0.6-1.el9.x86_64.rpm
+          - /home/docker-ce-24.0.6-1.el9.x86_64.rpm
+          - /home/docker-buildx-plugin-0.11.2-1.el9.x86_64.rpm
+          - /home/docker-compose-plugin-2.21.0-1.el9.x86_64.rpm
+          - /home/containerd.io-1.6.9-3.1.el9.x86_64.rpm
+        disable_gpg_check: True
+        disablerepo: baseos,appstream,extras
+        state: present
+
+    - name: Systemctl enable and start docker.service
+      ansible.builtin.systemd_service:
+        name: docker
+        state: started
+        enabled: True
+
+- name: K3s master install
+  hosts: master
+  become: true
+  gather_facts: no
+  tasks:
+
+    - name: mkdir /var/lib/rancher/k3s/agent/images/
+      ansible.builtin.file:
+        path: /var/lib/rancher/k3s/agent/images/
+        state: directory
+        mode: '0755'
+
+    - name: Set k3s Executable
+      ansible.builtin.copy:
+        src: /share/k3s/k3s
+        dest: /usr/local/bin/
+        mode: '0755'
+
+    - name: Set images
+      ansible.builtin.copy:
+        src: /share/k3s/k3s-airgap-images-amd64.tar
+        dest: /var/lib/rancher/k3s/agent/images/
+
+    - name: Set install script
+      ansible.builtin.copy:
+        src: /share/k3s/install.sh
+        dest: /home/
+        mode: '0755'
+
+    - name: Get file for k3s-selinux
+      ansible.builtin.copy:
+        src: /share/k3s/k3s-selinux-1.4-1.el9.noarch.rpm
+        dest: /home/
+
+    - name: install k3s-selinux
+      ansible.builtin.yum:
+        name: /home/k3s-selinux-1.4-1.el9.noarch.rpm
+        disable_gpg_check: True
+        disablerepo: baseos,appstream,extras,extras-common
+        state: present
+
+    - name: Execute ./install.sh
+      ansible.builtin.shell: INSTALL_K3S_SKIP_DOWNLOAD=true /home/./install.sh --docker
+
+    - name: Get node token.
+      ansible.builtin.command: cat /var/lib/rancher/k3s/server/node-token
+      changed_when: false
+      register: node_token_output
+
+    - name: Set node_token fact.
+      ansible.builtin.set_fact:
+        node_token: "{{ node_token_output.stdout_lines[0] }}"
+
+    - name: Set firewall rule 6443/tcp
+      firewalld:
+        zone: public
+        port: 6443/tcp
+        permanent: true
+        state: enabled
+
+    - name: reload firewall
+      ansible.builtin.raw: firewall-cmd --reload
