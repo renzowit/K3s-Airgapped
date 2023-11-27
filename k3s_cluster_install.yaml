@@ -40,7 +40,7 @@
         state: present
 
     - name: Execute ./install.sh
-      ansible.builtin.shell: > 
+      ansible.builtin.shell: >-
         INSTALL_K3S_SKIP_DOWNLOAD=true /home/./install.sh
 
     - name: Get node token

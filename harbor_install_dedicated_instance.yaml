@@ -39,4 +39,5 @@
         mode: '0755'
 
     - name: Execute ./install.sh
-      ansible.builtin.raw: /home/harbor/./install.sh
+      ansible.builtin.shell: >- 
+        /home/harbor/./install.sh

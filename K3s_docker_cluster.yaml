@@ -44,7 +44,8 @@
         state: present
 
     - name: Execute ./install.sh
-      ansible.builtin.shell: INSTALL_K3S_SKIP_DOWNLOAD=true /home/./install.sh --docker
+      ansible.builtin.shell: >- 
+        INSTALL_K3S_SKIP_DOWNLOAD=true /home/./install.sh --docker
 
     - name: Get node token.
       ansible.builtin.command: cat /var/lib/rancher/k3s/server/node-token

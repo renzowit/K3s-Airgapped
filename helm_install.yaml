@@ -10,5 +10,6 @@
         mode: '0755'
 
     - name: export kubeconfig
-      ansible.builtin.raw: export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+      ansible.builtin.shell: >-
+        export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
