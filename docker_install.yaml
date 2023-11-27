@@ -22,8 +22,17 @@
         disablerepo: baseos,appstream,extras
         state: present
 
+    - name: Configure insecure registry
+      ansible.builtin.copy:
+        content: |
+          {
+            "insecure-registries" : [ "192.168.1.1:5000" ]
+          }
+        dest: /etc/docker/daemon.json
+
     - name: Systemctl enable and start docker.service
       ansible.builtin.systemd_service:
         name: docker
         state: started
         enabled: True
+

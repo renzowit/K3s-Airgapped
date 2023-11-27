@@ -1,7 +1,6 @@
 - name: K3s worker nodes install
   hosts: workers
   gather_facts: no
-  become: true
   tasks:
 
     - name: mkdir /var/lib/rancher/k3s/agent/images/
@@ -44,6 +43,6 @@
         INSTALL_K3S_SKIP_DOWNLOAD=true \
         K3S_URL="https://{{ groups['master'][0] }}:6443" \
         K3S_TOKEN="{{ hostvars[groups['master'][0]]['node_token'] }}" \
-        /home/./install.sh --docker
+        /home/./install.sh
       args:
         executable: /bin/bash

@@ -68,3 +68,5 @@
 - name: Set up worker nodes
   import_playbook: K3s_worker_install.yaml
 
+- name: Set up Helm for master
+  import_playbook: helm_install.yaml
