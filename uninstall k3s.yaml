@@ -11,7 +11,7 @@
         chdir: "~"
 
 - name: K3s node uninstall
-  hosts: nodes
+  hosts: workers
   gather_facts: false
   become: true
   tasks:
