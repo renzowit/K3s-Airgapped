@@ -1,11 +1,7 @@
-- name: Set up Docker on all nodes
-  import_playbook: docker_install.yaml
-  tags: ['docker']
-
-- name: K3s master install
-  hosts: master
-  become: true
+- name: K3s worker nodes install
+  hosts: workers
   gather_facts: no
+  become: true
   tasks:
 
     - name: mkdir /var/lib/rancher/k3s/agent/images/
@@ -43,28 +39,11 @@
         disablerepo: baseos,appstream,extras,extras-common
         state: present
 
-    - name: Execute ./install.sh
-      ansible.builtin.shell: INSTALL_K3S_SKIP_DOWNLOAD=true /home/./install.sh --docker
-
-    - name: Get node token.
-      ansible.builtin.command: cat /var/lib/rancher/k3s/server/node-token
-      changed_when: false
-      register: node_token_output
-
-    - name: Set node_token fact.
-      ansible.builtin.set_fact:
-        node_token: "{{ node_token_output.stdout_lines[0] }}"
-
-    - name: Set firewall rule 6443/tcp
-      firewalld:
-        zone: public
-        port: 6443/tcp
-        permanent: true
-        state: enabled
-
-    - name: reload firewall
-      ansible.builtin.raw: firewall-cmd --reload
-
-- name: Set up worker nodes
-  import_playbook: K3s_worker_install.yaml
-
+    - name: Install K3s on worker nodes
+      ansible.builtin.shell: >
+        INSTALL_K3S_SKIP_DOWNLOAD=true \
+        K3S_URL="https://{{ groups['master'][0] }}:6443" \
+        K3S_TOKEN="{{ hostvars[groups['master'][0]]['node_token'] }}" \
+        /home/./install.sh --docker
+      args:
+        executable: /bin/bash

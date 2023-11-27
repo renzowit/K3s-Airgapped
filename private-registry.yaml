@@ -1,6 +1,7 @@
 - name: K3s private registry configuration
   hosts: all
   gather_facts: no
+  become: true
   tasks:
 
     - name: Create /etc/rancher/k3s/ directory on all nodes
