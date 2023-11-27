@@ -67,7 +67,7 @@
       ansible.builtin.raw: firewall-cmd --reload
 
 - name: Set up worker nodes
-  import_playbook: K3s_worker_install.yaml
+  import_playbook: K3s_docker_worker_install.yaml
 
 - name: Set up Helm for master
   import_playbook: helm_install.yaml
