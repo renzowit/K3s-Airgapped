@@ -60,3 +60,9 @@
             "insecure-registries" : [ "192.168.1.1:5000" ]
           }
         dest: /etc/docker/daemon.json
+    
+    - name: Restart Docker service
+      ansible.builtin.systemd:
+        state: restarted
+        daemon_reload: true
+        name: docker
