@@ -26,6 +26,7 @@
 - name: Restart K3s master node service
   hosts: master
   gather_facts: no
+  become: true
   tasks:
 
     - name: Restart K3s service
@@ -37,6 +38,7 @@
 - name: Restart K3s-agent service on worker nodes
   hosts: workers
   gather_facts: no
+  become: true
   tasks:
 
     - name: Restart K3s-agent service
@@ -44,3 +46,17 @@
         state: restarted
         daemon_reload: true
         name: k3s-agent
+
+- name: Add insecure registry to docker
+  hosts: all
+  gather_facts: no
+  become: true
+  tasks:
+
+    - name: Configure insecure registry
+      ansible.builtin.copy:
+        content: |
+          {
+            "insecure-registries" : [ "192.168.1.1:5000" ]
+          }
+        dest: /etc/docker/daemon.json
