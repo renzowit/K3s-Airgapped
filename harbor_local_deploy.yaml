@@ -31,34 +31,34 @@
         dest: /home/
 
     - name: K3s load harbor-core image
-      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-core-v2.9.1.tar
+      ansible.builtin.raw: k3s ctr images import /home/harbor-images/harbor-core-v2.9.1.tar
 
     - name: K3s load harbor-db image
-      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-db-v2.9.1.tar
+      ansible.builtin.raw: k3s ctr images import /home/harbor-imagess/harbor-db-v2.9.1.tar
 
     - name: K3s load harbor-exporter image
-      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-exporter-v2.9.1.tar
+      ansible.builtin.raw: k3s ctr images import /home/harbor-images/harbor-exporter-v2.9.1.tar
 
     - name: K3s load harbor-jobservice image
-      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-jobservice-v2.9.1.tar
+      ansible.builtin.raw: k3s ctr images import /home/harbor-images/harbor-jobservice-v2.9.1.tar
 
     - name: K3s load harbor-portal image
-      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-portal-v2.9.1.tar
+      ansible.builtin.raw: k3s ctr images import /home/harbor-images/harbor-portal-v2.9.1.tar
 
     - name: K3s load harbor-registryctl image
-      ansible.builtin.raw: k3s ctr images import /home/harbor_images/harbor-registryctl-v2.9.1.tar
+      ansible.builtin.raw: k3s ctr images import /home/harbor-images/harbor-registryctl-v2.9.1.tar
 
     - name: K3s load nginx-photon image
-      ansible.builtin.raw: k3s ctr images import /home/harbor_images/nginx-photon-v2.9.1.tar
+      ansible.builtin.raw: k3s ctr images import /home/harbor-images/nginx-photon-v2.9.1.tar
 
     - name: K3s load redis-photon image
-      ansible.builtin.raw: k3s ctr images import /home/harbor_images/redis-photon-v2.9.1.tar
+      ansible.builtin.raw: k3s ctr images import /home/harbor-images/redis-photon-v2.9.1.tar
 
     - name: K3s load registry-photon image
-      ansible.builtin.raw: k3s ctr images import /home/harbor_images/registry-photon-v2.9.1.tar
+      ansible.builtin.raw: k3s ctr images import /home/harbor-images/registry-photon-v2.9.1.tar
 
     - name: K3s load harbor-db image
-      ansible.builtin.raw: k3s ctr images import /home/harbor_images/trivy-adapter-photon-v2.9.1.tar
+      ansible.builtin.raw: k3s ctr images import /home/harbor-images/trivy-adapter-photon-v2.9.1.tar
 
     - name: K3s load harbor-db image
       ansible.builtin.raw: k3s ctr images import /home/mirrored-pause.tar
