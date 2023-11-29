@@ -22,7 +22,12 @@
 
     - name: Copy images to master
       ansible.builtin.unarchive:
-        src: /share/harbor
+        src: /share/harbor/harbor-images.tar
+        dest: /home/
+    
+    - name: copy rancher/mirrored-pause to master
+      ansible.builtin.copy:
+        src: /share/harbor/mirrored-pause.tar
         dest: /home/
 
     - name: K3s load harbor-core image
