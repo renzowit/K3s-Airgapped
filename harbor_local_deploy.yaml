@@ -15,9 +15,9 @@
         state: directory
         mode: '0755'
 
-    - name: copy Helm chart to master
+    - name: copy Helm template to master
       ansible.builtin.copy:
-        src: /share/harbor/harbor_deployment
+        src: /share/harbor/template.yaml
         dest: /home/
 
     - name: Copy images to master
