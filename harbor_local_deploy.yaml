@@ -22,7 +22,7 @@
 
     - name: Copy images to master
       ansible.builtin.unarchive:
-        src: /share/harbor/harbor-images.tar
+        src: /share/harbor/
         dest: /home/
 
     - name: K3s load harbor-core image
