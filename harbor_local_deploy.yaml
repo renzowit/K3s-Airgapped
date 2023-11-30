@@ -1,6 +1,7 @@
 - name: Harbor deployment using Helm
-  hosts: master
+  hosts: all
   gather_facts: no
+  become: true
   tasks:
 
     - name: mkdir directory for Harbor container images
@@ -9,14 +10,8 @@
         state: directory
         mode: '0755'
 
-    - name: mkdir directory for Harbor Helm chart
-      ansible.builtin.file:
-        path: /home/harbor_deployment
-        state: directory
-        mode: '0755'
-
     - name: copy Helm chart to master
-      ansible.builtin.copy:
+      ansible.builtin.unarchive:
         src: /share/harbor/harbor-1.13.1.tgz
         dest: /home/
 
@@ -60,7 +55,7 @@
     - name: K3s load harbor-db image
       ansible.builtin.raw: k3s ctr images import /home/harbor-images/trivy-adapter-photon-v2.9.1.tar
 
-    - name: K3s load harbor-db image
+    - name: K3s load rancher/mirrored-pause image
       ansible.builtin.raw: k3s ctr images import /home/mirrored-pause.tar
 
     - name: install Harbor using Helm
