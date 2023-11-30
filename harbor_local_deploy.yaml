@@ -29,7 +29,7 @@
       ansible.builtin.raw: k3s ctr images import /home/harbor-images/harbor-core.tar
 
     - name: K3s load harbor-db image
-      ansible.builtin.raw: k3s ctr images import /home/harbor-imagess/harbor-db.tar
+      ansible.builtin.raw: k3s ctr images import /home/harbor-images/harbor-db.tar
 
     - name: K3s load harbor-exporter image
       ansible.builtin.raw: k3s ctr images import /home/harbor-images/harbor-exporter.tar
