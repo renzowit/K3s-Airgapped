@@ -16,7 +16,7 @@
         mode: '0755'
 
     - name: copy Helm chart to master
-      ansible.builtin.unarchive:
+      ansible.builtin.copy:
         src: /share/harbor/harbor-1.13.1.tgz
         dest: /home/
 
