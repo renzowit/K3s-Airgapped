@@ -1,6 +1,6 @@
 - name: Harbor deployment using Helm
   hosts: all
-  gather_facts: no
+  gather_facts: false
   become: true
   tasks:
 
@@ -10,17 +10,17 @@
         state: directory
         mode: '0755'
 
-    - name: copy Helm chart to master
+    - name: copy Helm chart to all nodes
       ansible.builtin.unarchive:
         src: /share/harbor/harbor-1.13.1.tgz
         dest: /home/
 
-    - name: Copy images to master
+    - name: Copy images to all nodes
       ansible.builtin.unarchive:
         src: /share/harbor/harbor-images.tar
         dest: /home/
     
-    - name: copy rancher/mirrored-pause to master
+    - name: copy rancher/mirrored-pause to all nodes
       ansible.builtin.copy:
         src: /share/harbor/mirrored-pause.tar
         dest: /home/
@@ -57,6 +57,12 @@
 
     - name: K3s load rancher/mirrored-pause image
       ansible.builtin.raw: k3s ctr images import /home/mirrored-pause.tar
+
+- name: Execute Helm chart
+  hosts: master
+  gather_facts: false
+  become: true
+  tasks:
 
     - name: install Harbor using Helm
       ansible.builtin.raw: helm install harbor /home/harbor --kubeconfig /etc/rancher/k3s/k3s.yaml
