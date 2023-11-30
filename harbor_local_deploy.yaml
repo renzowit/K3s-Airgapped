@@ -65,5 +65,5 @@
   tasks:
 
     - name: install Harbor using Helm
-      ansible.builtin.raw: helm install harbor /home/harbor --kubeconfig /etc/rancher/k3s/k3s.yaml
+      ansible.builtin.raw: helm install harbor --generate name --kubeconfig /etc/rancher/k3s/k3s.yaml
     
