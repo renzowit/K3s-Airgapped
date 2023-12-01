@@ -3,6 +3,7 @@
   gather_facts: false
   become: true
   tasks:
+  
     - name: mkdir directory for Harbor container images
       ansible.builtin.file:
         path: /home/harbor_images
@@ -48,6 +49,7 @@
   gather_facts: false
   become: true
   tasks:
+
     - name: install Harbor using Helm
       ansible.builtin.shell: >-
         helm install harbor --generate name --kubeconfig /etc/rancher/k3s/k3s.yaml
