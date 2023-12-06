@@ -15,14 +15,19 @@
         src: /share/harbor/harbor-1.13.1.tgz
         dest: /home/
 
+    - name: copy rancher/mirrored-pause to all nodes
+      ansible.builtin.copy:
+        src: /share/harbor/mirrored-pause.tar
+        dest: /home/
+
     - name: Copy images to all nodes
       ansible.builtin.unarchive:
         src: /share/harbor/harbor-images.tar
         dest: /home/
-    
-    - name: copy rancher/mirrored-pause to all nodes
+
+    - name: copy nginx
       ansible.builtin.copy:
-        src: /share/harbor/mirrored-pause.tar
+        src: /share/harbor/nginx.tar
         dest: /home/
 
     - name: Define Harbor images list

@@ -40,7 +40,7 @@
         state: present
 
     - name: Install K3s on worker nodes
-      ansible.builtin.shell: >
+      ansible.builtin.shell: >-
         INSTALL_K3S_SKIP_DOWNLOAD=true \
         K3S_URL="https://{{ groups['master'][0] }}:6443" \
         K3S_TOKEN="{{ hostvars[groups['master'][0]]['node_token'] }}" \
