@@ -45,6 +45,10 @@
           - registry-photon
           - trivy-adapter-photon
 
+    - name: Create a new tag for nginx image
+      ansible.builtin.shell:
+        cmd: "k3s ctr images tag docker.io/library/nginx:latest docker.io/library/nginx:v1"
+
     - name: Load Harbor images using K3s ctr
       ansible.builtin.shell:
         cmd: "k3s ctr images import /home/harbor-images/{{ item }}.tar"
