@@ -58,4 +58,4 @@
 
     - name: install Harbor using Helm
       ansible.builtin.shell: >-
-        helm install harbor --generate name --kubeconfig /etc/rancher/k3s/k3s.yaml
+        helm install harbor --generate-name --kubeconfig /etc/rancher/k3s/k3s.yaml
