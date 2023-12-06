@@ -25,11 +25,6 @@
         src: /share/harbor/harbor-images.tar
         dest: /home/
 
-    - name: copy nginx
-      ansible.builtin.copy:
-        src: /share/harbor/nginx.tar
-        dest: /home/harbor-images
-
     - name: Define Harbor images list
       set_fact:
         harbor_images:
