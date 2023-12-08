@@ -4,18 +4,18 @@
   become: true
   tasks:
   
-    - name: mkdir directory for Harbor container images
+    - name: Mkdir directory for Harbor container images
       ansible.builtin.file:
         path: /home/harbor_images
         state: directory
         mode: '0755'
 
-    - name: copy Helm chart to all nodes
+    - name: Copy Helm chart to all nodes
       ansible.builtin.unarchive:
         src: /share/harbor/harbor-1.13.1.tgz
         dest: /home/
 
-    - name: copy rancher/mirrored-pause to all nodes
+    - name: Copy rancher/mirrored-pause to all nodes
       ansible.builtin.copy:
         src: /share/harbor/mirrored-pause.tar
         dest: /home/
@@ -51,7 +51,7 @@
   become: true
   tasks:
 
-    - name: install Harbor using Helm
+    - name: Install Harbor using Helm
       ansible.builtin.shell: >-
         helm install harbor --generate-name --kubeconfig /etc/rancher/k3s/k3s.yaml
       args:
