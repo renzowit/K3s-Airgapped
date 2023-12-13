@@ -52,6 +52,9 @@
       ansible.builtin.set_fact:
         node_token: "{{ node_token_output.stdout_lines[0] }}"
 
+- name: firewalld configuration
+  import_playbook: firewalld.yaml
+
 - name: Set up worker nodes
   import_playbook: K3s_worker_install.yaml
 
