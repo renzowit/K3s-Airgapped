@@ -30,7 +30,7 @@
         harbor_images:
           - harbor-core
           - harbor-db
-          - harbor-exporter
+          - harbor-exporter   
           - harbor-jobservice
           - harbor-portal
           - harbor-registryctl
