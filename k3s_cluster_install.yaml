@@ -60,6 +60,3 @@
 
 - name: Set up Helm for master
   import_playbook: helm_install.yaml
-
-- name: Configure private registry for K3s
-  import_playbook: private-registry.yaml
