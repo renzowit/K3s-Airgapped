@@ -28,7 +28,6 @@
     - name: Define Harbor images list
       set_fact:
         harbor_images:
-          - nginx
           - harbor-core
           - harbor-db
           - harbor-exporter
