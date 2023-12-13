@@ -52,16 +52,6 @@
       ansible.builtin.set_fact:
         node_token: "{{ node_token_output.stdout_lines[0] }}"
 
-    - name: Set firewall rule 6443/tcp
-      firewalld:
-        zone: public
-        port: 6443/tcp
-        permanent: true
-        state: enabled
-
-    - name: reload firewall
-      ansible.builtin.raw: firewall-cmd --reload
-
 - name: Set up worker nodes
   import_playbook: K3s_worker_install.yaml
 
