@@ -1,16 +1,16 @@
 - name: Docker install for K3s
   hosts: all
-  gather_facts: no
-  become: True
+  gather_facts: false
+  become: true
   tasks:
 
-    - name: copy required files for install
+    - name: Copy required files for install
       ansible.builtin.copy:
         src: /share/docker/
         dest: /home/
 
     - name: Install Docker and related packages
-      yum:
+      ansible.builtin.yum:
         name:
           - /home/docker-ce-cli-24.0.6-1.el9.x86_64.rpm
           - /home/docker-ce-rootless-extras-24.0.6-1.el9.x86_64.rpm
@@ -18,7 +18,7 @@
           - /home/docker-buildx-plugin-0.11.2-1.el9.x86_64.rpm
           - /home/docker-compose-plugin-2.21.0-1.el9.x86_64.rpm
           - /home/containerd.io-1.6.9-3.1.el9.x86_64.rpm
-        disable_gpg_check: True
+        disable_gpg_check: true
         disablerepo: baseos,appstream,extras
         state: present
 
@@ -34,5 +34,4 @@
       ansible.builtin.systemd_service:
         name: docker
         state: started
-        enabled: True
-
+        enabled: true
