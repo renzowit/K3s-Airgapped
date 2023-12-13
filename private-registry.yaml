@@ -14,11 +14,11 @@
       copy:
         content: |
           mirrors:
-            192.168.1.1:5000:
+            harbor.core.local:
               endpoint:
-                - "http://192.168.1.1:5000"
+                - "http://harbor.core.local"
           configs:
-            "192.168.1.1:5000":
+            "harbor.core.local":
               tls:
                 insecure_skip_verify: true
         dest: /etc/rancher/k3s/registries.yaml
@@ -47,23 +47,4 @@
         daemon_reload: true
         name: k3s-agent
 
-- name: Add insecure registry to docker
-  hosts: all
-  gather_facts: no
-  become: true
-  tasks:
-
-    - name: Configure insecure registry
-      ansible.builtin.copy:
-        content: |
-          {
-            "insecure-registries" : [ "192.168.1.1:5000" ]
-          }
-        dest: /etc/docker/daemon.json
-    
-    - name: Restart Docker service
-      ansible.builtin.systemd:
-        state: restarted
-        daemon_reload: true
-        name: docker
         
