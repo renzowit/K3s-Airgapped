@@ -1,5 +1,0 @@
-- name: Deploy Harbor from private registry
-  hosts: all
-  gather_facts: no
-  become: True
-  tasks:
