@@ -1,23 +1,4 @@
-- name: Deploy Grafana + Prometheus
-  hosts: all
-  become: true
-  gather_facts: false
-  tasks:
-
-    - name: Define images list
-      set_fact:
-        images:
-          - prometheus:latest
-          - node-exporter:latest
-          - kube-state-metrics:v2.3.0
-          - grafana:latest
-
-    - name: Load container images from Harbor
-      ansible.builtin.shell:
-        cmd: "ctr image pull --plain-http harbor.core.local/k3s/{{ item }}"
-      loop: "{{ images }}"
-
-- name: Copy .yaml files to master
+- name: Monitoring deployment
   hosts: master
   become: true
   gather_facts: false
