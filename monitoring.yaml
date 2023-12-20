@@ -32,10 +32,33 @@
     - name: Create monitoring namespace
       ansible.builtin.shell:
         cmd: kubectl create namespace monitoring
-      
 
     - name: Persistent volumes
       ansible.builtin.shell:
         cmd: kubectl apply -f kubernetes-persistent-volume/
+      args:
+        chdir: /home/prometheus-grafana-setup/
+
+    - name: Prometheus deployment
+      ansible.builtin.shell:
+        cmd: kubectl apply -f kubernetes-prometheus/
+      args:
+        chdir: /home/prometheus-grafana-setup/
+
+    - name: kube-state-metrics deployment
+      ansible.builtin.shell:
+        cmd: kubectl apply -f kube-state-metrics-configs/
+      args:
+        chdir: /home/prometheus-grafana-setup/
+
+    - name: Node-exporter deployment
+      ansible.builtin.shell:
+        cmd: kubectl apply -f kubernetes-node-exporter/
+      args:
+        chdir: /home/prometheus-grafana-setup/
+
+    - name: Grafana deployment
+      ansible.builtin.shell:
+        cmd: kubectl apply -f kubernetes-grafana/
       args:
         chdir: /home/prometheus-grafana-setup/
