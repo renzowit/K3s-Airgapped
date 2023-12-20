@@ -16,7 +16,7 @@
           mirrors:
             harbor.core.local:
               endpoint:
-                - "http://harbor.core.local"
+                - "http://harbor.core.local:80"
           configs:
             "harbor.core.local":
               tls:
