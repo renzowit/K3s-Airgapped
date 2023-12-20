@@ -29,6 +29,10 @@
         dest: /home/
         mode: '0755'
 
+    - name: Create monitoring namespace
+      ansible.builtin.shell:
+        cmd: kubectl create namespace monitoring
+      
 
     - name: Persistent volumes
       ansible.builtin.shell:
