@@ -33,5 +33,5 @@
     - name: Persistent volumes
       ansible.builtin.shell:
         cmd: kubectl apply -f kubernetes-persistent-volume/
-      arg:
+      args:
         chdir: /home/prometheus-grafana-setup/
