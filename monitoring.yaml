@@ -25,7 +25,7 @@
 
     - name: Copy .yaml files to master
       ansible.builtin.copy:
-        src: /home/rens/desktop/prometheus-grafana-setup/
+        src: /home/rens/desktop/prometheus-grafana-setup
         dest: /home/
         mode: '0755'
 
