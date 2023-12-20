@@ -16,3 +16,22 @@
       ansible.builtin.shell:
         cmd: "ctr image pull --plain-http harbor.core.local/k3s/{{ item }}"
       loop: "{{ images }}"
+
+- name: Copy .yaml files to master
+  hosts: master
+  become: true
+  gather_facts: false
+  tasks:
+
+    - name: Copy .yaml files to master
+      ansible.builtin.copy:
+        src: /home/desktop/prometheus-grafana-setup
+        dest: /home/
+        mode: '0755'
+
+
+    - name: Persistent volumes
+      ansible.builtin.shell:
+        cmd: kubectl apply -f kubernetes-persistent-volume/
+      arg:
+        chdir: /home/prometheus-grafana-setup/
