@@ -4,7 +4,7 @@
   gather_facts: false
   tasks:
 
-    - name: Copy .yaml files to master
+    - name: Copy required .yaml files to master
       ansible.builtin.copy:
         src: /home/rens/Desktop/prometheus-grafana-setup
         dest: /home/
