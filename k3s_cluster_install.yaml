@@ -63,6 +63,3 @@
 
 - name: Set up Harbor private registry
   import_playbook: private-registry.yaml
-
-- name: Harbor deployment
-  import_playbook: harbor_local_deploy.yaml
