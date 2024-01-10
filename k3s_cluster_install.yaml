@@ -12,7 +12,7 @@
 
     - name: Set k3s Executable
       ansible.builtin.copy:
-        src: "{{ ansible_env.HOME }}/Desktop/K3s-Airgapped/k3s/k3s"  # Verander dit pad naar de gewenste bronlocatie
+        src: "k3s"
         dest: /usr/local/bin/
         mode: '0755'
 
