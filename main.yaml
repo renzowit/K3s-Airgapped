@@ -1,5 +1,5 @@
 - name: K3s master install
-  hosts: master
+  hosts: all
   become: true
   gather_facts: no
   tasks:
@@ -52,55 +52,6 @@
       ansible.builtin.set_fact:
         node_token: "{{ node_token_output.stdout_lines[0] }}"
 
-- name: K3s worker nodes install
-  hosts: workers
-  gather_facts: no
-  tasks:
-
-    - name: mkdir /var/lib/rancher/k3s/agent/images/
-      ansible.builtin.file:
-        path: /var/lib/rancher/k3s/agent/images/
-        state: directory
-        mode: '0755'
-
-    - name: Set k3s Executable
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/k3s_files/k3s"
-        dest: /usr/local/bin/
-        mode: '0755'
-
-    - name: Set images
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/k3s_files/k3s-airgap-images-amd64.tar"
-        dest: /var/lib/rancher/k3s/agent/images/
-
-    - name: Set install script
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/k3s_files/install.sh"
-        dest: /home/
-        mode: '0755'
-
-    - name: Get file for k3s-selinux
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/k3s_files/k3s-selinux-1.4-1.el9.noarch.rpm"
-        dest: /home/
-
-    - name: install k3s-selinux
-      ansible.builtin.yum:
-        name: /home/k3s-selinux-1.4-1.el9.noarch.rpm
-        disable_gpg_check: True
-        disablerepo: baseos,appstream,extras,extras-common
-        state: present
-
-    - name: Install K3s on worker nodes
-      ansible.builtin.shell: >-
-        INSTALL_K3S_SKIP_DOWNLOAD=true \
-        K3S_URL="https://{{ groups['master'][0] }}:6443" \
-        K3S_TOKEN="{{ hostvars[groups['master'][0]]['node_token'] }}" \
-        /home/./install.sh
-      args:
-        executable: /bin/bash
-
 - name: Disable firewalld
   hosts: all
   become: true
@@ -113,7 +64,7 @@
         state: stopped
 
 - name: Helm install for master server
-  hosts: master
+  hosts: all
   gather_facts: no
   tasks:
 
@@ -153,7 +104,7 @@
         dest: /etc/rancher/k3s/registries.yaml
 
 - name: Restart K3s master node service
-  hosts: master
+  hosts: all
   gather_facts: no
   become: true
   tasks:
@@ -163,17 +114,5 @@
         state: restarted
         daemon_reload: true
         name: k3s
-
-- name: Restart K3s-agent service on worker nodes
-  hosts: workers
-  gather_facts: no
-  become: true
-  tasks:
-
-    - name: Restart K3s-agent service
-      ansible.builtin.systemd:
-        state: restarted
-        daemon_reload: true
-        name: k3s-agent
 
         
