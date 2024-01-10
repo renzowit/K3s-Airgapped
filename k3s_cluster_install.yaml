@@ -23,13 +23,13 @@
 
     - name: Set install script
       ansible.builtin.copy:
-        src: "install.sh"
+        src: install.sh
         dest: /home/
         mode: '0755'
 
     - name: Get file for k3s-selinux
       ansible.builtin.copy:
-        src: "k3s-selinux-1.4-1.el9.noarch.rpm"
+        src: k3s-selinux-1.4-1.el9.noarch.rpm
         dest: /home/
 
     - name: install k3s-selinux
