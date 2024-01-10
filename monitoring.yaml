@@ -6,7 +6,7 @@
 
     - name: Copy required .yaml files to master
       ansible.builtin.copy:
-        src: /home/rens/Desktop/prometheus-grafana-setup
+        src: /prometheus-grafana-setup
         dest: /home/
         mode: '0755'
 
@@ -18,28 +18,28 @@
       ansible.builtin.shell:
         cmd: kubectl apply -f kubernetes-persistent-volume/
       args:
-        chdir: /home/prometheus-grafana-setup/
+        chdir: /prometheus-grafana-setup/
 
     - name: Prometheus deployment
       ansible.builtin.shell:
         cmd: kubectl apply -f kubernetes-prometheus/
       args:
-        chdir: /home/prometheus-grafana-setup/
+        chdir: /prometheus-grafana-setup/
 
     - name: kube-state-metrics deployment
       ansible.builtin.shell:
         cmd: kubectl apply -f kube-state-metrics-configs/
       args:
-        chdir: /home/prometheus-grafana-setup/
+        chdir: /prometheus-grafana-setup/
 
     - name: Node-exporter deployment
       ansible.builtin.shell:
         cmd: kubectl apply -f kubernetes-node-exporter/
       args:
-        chdir: /home/prometheus-grafana-setup/
+        chdir: /prometheus-grafana-setup/
 
     - name: Grafana deployment
       ansible.builtin.shell:
         cmd: kubectl apply -f kubernetes-grafana/
       args:
-        chdir: /home/prometheus-grafana-setup/
+        chdir: /prometheus-grafana-setup/
