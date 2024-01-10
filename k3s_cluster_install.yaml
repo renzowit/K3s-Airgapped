@@ -18,7 +18,7 @@
 
     - name: Set images
       ansible.builtin.copy:
-        src: ""{{ playbook_dir }}/k3s_files/k3s-airgap-images-amd64.tar"
+        src: "{{ playbook_dir }}/k3s_files/k3s-airgap-images-amd64.tar"
         dest: /var/lib/rancher/k3s/agent/images/
 
     - name: Set install script
