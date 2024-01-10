@@ -101,36 +101,11 @@
       args:
         executable: /bin/bash
 
-- name: Configure Firewall Rules
+- name: Disable firewalld
   hosts: all
   become: true
   gather_facts: false
   tasks:
-
-    - name: Add port 6443 for apiserver
-      firewalld:
-        port: 6443/tcp
-        permanent: yes
-        state: enabled
-
-    - name: Add source 10.42.0.0/16 to trusted zone for pods
-      firewalld:
-        zone: trusted
-        source: 10.42.0.0/16
-        permanent: yes
-        state: enabled
-
-    - name: Add source 10.43.0.0/16 to trusted zone for services
-      firewalld:
-        zone: trusted
-        source: 10.43.0.0/16
-        permanent: yes
-        state: enabled
-
-    - name: Restart firewalld service
-      ansible.builtin.service:
-        name: firewalld
-        state: restarted
 
     - name: Stop firewalld service
       ansible.builtin.service:
