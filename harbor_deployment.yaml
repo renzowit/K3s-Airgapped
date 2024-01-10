@@ -12,17 +12,17 @@
 
     - name: Copy Helm chart to all nodes
       ansible.builtin.unarchive:
-        src: /share/harbor/harbor-1.13.1.tgz
+        src: "{{ playbook_dir }}/harbor/harbor-1.13.1.tgz"
         dest: /home/
 
     - name: Copy rancher/mirrored-pause to all nodes
       ansible.builtin.copy:
-        src: /share/harbor/mirrored-pause.tar
+        src: "{{ playbook_dir }}/harbor/mirrored-pause.tar"
         dest: /home/
 
     - name: Copy images to all nodes
       ansible.builtin.unarchive:
-        src: /share/harbor/harbor-images.tar
+        src: "{{ playbook_dir }}/harbor/harbor-images.tar"
         dest: /home/
 
     - name: Define Harbor images list
