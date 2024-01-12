@@ -252,6 +252,8 @@
     - name: Deploy components
       ansible.builtin.shell:
         cmd: "kubectl apply -f {{ item.path }}"
+      args:
+        chdir: /prometheus-grafana-setup/
       loop:
         - path: kubernetes-persistent-volume/
         - path: kubernetes-prometheus/
