@@ -1,5 +1,5 @@
 - name: K3s master install
-  hosts: all
+  hosts: master
   become: true
   gather_facts: no
   tasks:
@@ -52,67 +52,20 @@
       ansible.builtin.set_fact:
         node_token: "{{ node_token_output.stdout_lines[0] }}"
 
-- name: Disable firewalld
-  hosts: all
-  become: true
-  gather_facts: false
-  tasks:
+- name: Set up worker nodes
+  import_playbook: K3s_worker_install.yaml
 
-    - name: Stop firewalld service
-      ansible.builtin.service:
-        name: firewalld
-        state: stopped
+- name: firewalld configuration
+  import_playbook: firewalld.yaml
 
-- name: Helm install for master server
-  hosts: all
-  gather_facts: no
-  tasks:
+- name: Set up Helm for master
+  import_playbook: helm_install.yaml
 
-    - name: copy Helm binary to desired destination
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/helm/linux-amd64/helm"
-        dest: /usr/local/bin/
-        mode: '0755'
+- name: Set up private registry configuration
+  import_playbook: private-registry.yaml
 
-    - name: export kubeconfig
-      ansible.builtin.shell: >-
-        export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+- name: Deploy Harbor on cluster
+  import_playbook: harbor_deployment.yaml
 
-- name: K3s private registry configuration
-  hosts: all
-  gather_facts: no
-  become: true
-  tasks:
-
-    - name: Create /etc/rancher/k3s/ directory on all nodes
-      ansible.builtin.file:
-        path: /etc/rancher/k3s/
-        state: directory
-        mode: '0755'
-
-    - name: Create /etc/rancher/k3s/registries.yaml on all nodes
-      copy:
-        content: |
-          mirrors:
-            harbor.core.local:
-              endpoint:
-                - "http://harbor.core.local:80"
-          configs:
-            "harbor.core.local":
-              tls:
-                insecure_skip_verify: true
-        dest: /etc/rancher/k3s/registries.yaml
-
-- name: Restart K3s master node service
-  hosts: all
-  gather_facts: no
-  become: true
-  tasks:
-
-    - name: Restart K3s service
-      ansible.builtin.systemd:
-        state: restarted
-        daemon_reload: true
-        name: k3s
-
-        
+- name: Deploy monitoring on cluster
+  import_playbook: monitoring.yaml
