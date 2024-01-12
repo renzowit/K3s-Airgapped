@@ -53,7 +53,7 @@
         node_token: "{{ node_token_output.stdout_lines[0] }}"
 
 - name: Disable firewall
-  hosts: all
+  hosts: master:workers
   become: true
   gather_facts: false
   tasks:
@@ -113,7 +113,7 @@
         executable: /bin/bash
 
 - name: K3s private registry configuration
-  hosts: all
+  hosts: master:workers
   gather_facts: no
   become: true
   tasks:
@@ -177,7 +177,7 @@
         export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
 - name: Load Harbor images using K3s ctr
-  hosts: all
+  hosts: master:workers
   gather_facts: false
   become: true
   tasks:
@@ -242,7 +242,7 @@
 
     - name: Tag docker images
       ansible.builtin.shell:
-        cmd: "docker tag {{ item }}:latest harbor.core.local/library/{{ item }}"
+        cmd: "docker tag {{ item }} harbor.core.local/library/{{ item }}"
       loop:
         - prom/prometheus:latest
         - prom/node-exporter:latest
