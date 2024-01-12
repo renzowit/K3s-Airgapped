@@ -249,6 +249,10 @@
         - k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.3.0
         - grafana/grafana:latest
 
+    - name: Pause for 3 minutes
+      ansible.builtin.pause:
+        seconds: 180
+
     - name: Push docker images
       ansible.builtin.shell:
         cmd: "docker push harbor.core.local/library/{{ item }}"
