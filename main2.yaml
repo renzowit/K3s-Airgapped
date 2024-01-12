@@ -234,6 +234,30 @@
       args:
         chdir: /home/
 
+- name: Push images to Harbor
+  hosts: localhost
+  gather_facts: false
+  become: true
+  tasks:
+
+    - name: Tag docker images
+      ansible.builtin.shell:
+        cmd: "docker tag {{ item }}:latest harbor.core.local/library/{{ item }}"
+      loop:
+        - prom/prometheus:latest
+        - prom/node-exporter:latest
+        - k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.3.0
+        - grafana/grafana:latest
+
+    - name: Push docker images
+      ansible.builtin.shell:
+        cmd: "docker push harbor.core.local/library/{{ item }}"
+      loop:
+        - prom/prometheus:latest
+        - prom/node-exporter:latest
+        - k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.3.0
+        - grafana/grafana:latest
+
 - name: Monitoring deployment
   hosts: master
   become: true
