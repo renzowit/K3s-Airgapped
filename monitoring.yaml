@@ -3,10 +3,9 @@
   become: true
   gather_facts: false
   tasks:
-
     - name: Copy required .yaml files to master
       ansible.builtin.copy:
-        src: /prometheus-grafana-setup
+        src: "{{ playbook_dir }}/prometheus-grafana-setup"
         dest: /home/
         mode: '0755'
 
@@ -14,32 +13,14 @@
       ansible.builtin.shell:
         cmd: kubectl create namespace monitoring
 
-    - name: Persistent volumes
+    - name: Deploy components
       ansible.builtin.shell:
-        cmd: kubectl apply -f kubernetes-persistent-volume/
+        cmd: "kubectl apply -f {{ item.path }}"
       args:
-        chdir: /prometheus-grafana-setup/
-
-    - name: Prometheus deployment
-      ansible.builtin.shell:
-        cmd: kubectl apply -f kubernetes-prometheus/
-      args:
-        chdir: /prometheus-grafana-setup/
-
-    - name: kube-state-metrics deployment
-      ansible.builtin.shell:
-        cmd: kubectl apply -f kube-state-metrics-configs/
-      args:
-        chdir: /prometheus-grafana-setup/
-
-    - name: Node-exporter deployment
-      ansible.builtin.shell:
-        cmd: kubectl apply -f kubernetes-node-exporter/
-      args:
-        chdir: /prometheus-grafana-setup/
-
-    - name: Grafana deployment
-      ansible.builtin.shell:
-        cmd: kubectl apply -f kubernetes-grafana/
-      args:
-        chdir: /prometheus-grafana-setup/
+        chdir: /home/prometheus-grafana-setup/
+      loop:
+        - path: kubernetes-persistent-volume/
+        - path: kubernetes-prometheus/
+        - path: kube-state-metrics-configs/
+        - path: kubernetes-node-exporter/
+        - path: kubernetes-grafana/
